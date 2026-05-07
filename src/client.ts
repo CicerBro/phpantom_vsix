@@ -7,10 +7,15 @@ import {
 } from "vscode-languageclient/node";
 import { resolveServerBinary } from "./downloader";
 
+export interface StartedClient {
+    client: LanguageClient;
+    serverPath: string;
+}
+
 export async function startClient(
     context: vscode.ExtensionContext,
     outputChannel: vscode.OutputChannel
-): Promise<LanguageClient> {
+): Promise<StartedClient> {
     const serverPath = await resolveServerBinary(context, outputChannel);
     const workspaceFolder = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
 
@@ -49,7 +54,10 @@ export async function startClient(
     await client.start();
     outputChannel.appendLine("PHPantom language server started.");
 
-    return client;
+    return {
+        client,
+        serverPath
+    };
 }
 
 export function applyConfiguredTrace(client: LanguageClient): void {

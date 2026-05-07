@@ -9,6 +9,8 @@ On first activation, the extension looks for a server binary in this order:
 3. A cached binary in the extension global storage
 4. A GitHub Releases download from `AJenbo/phpantom_lsp`, when `phpantom.autoDownload` is enabled
 
+When `phpantom.releaseTag` is `latest`, the extension also checks for newer PHPantom releases in the background on startup and periodically while active. If a newer downloaded binary becomes available, PHPantom restarts automatically so the new server is used. Background updates are skipped when `phpantom.serverPath` is set, `phpantom.autoDownload` is disabled, `phpantom.autoUpdate` is disabled, or a `phpantom_lsp` binary on `PATH` has priority.
+
 The language server communicates over stdio and attaches to files with language ID `php`.
 
 ## Cursor
@@ -39,6 +41,14 @@ GitHub release tag to download. The default is `latest`, which uses the latest s
 `phpantom.autoDownload`
 
 Automatically download `phpantom_lsp` when no configured or PATH binary is available. Enabled by default.
+
+`phpantom.autoUpdate`
+
+Automatically check for newer downloaded `phpantom_lsp` releases when `phpantom.releaseTag` is `latest`. Enabled by default. Ignored when `phpantom.serverPath` is set.
+
+`phpantom.updateCheckIntervalHours`
+
+How often to check for newer PHPantom language server releases while the extension is active. The extension also checks once on startup without blocking activation. Defaults to `24`.
 
 `phpantom.trace.server`
 

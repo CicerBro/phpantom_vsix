@@ -34,6 +34,13 @@ interface LatestMarker {
     tagName: string;
 }
 
+export interface ServerUpdateResult {
+    status: "updated" | "current" | "skipped";
+    releaseTag?: string;
+    serverPath?: string;
+    reason?: string;
+}
+
 export async function resolveServerBinary(
     context: vscode.ExtensionContext,
     outputChannel: vscode.OutputChannel
@@ -139,6 +146,76 @@ export async function downloadServer(
     }
 
     return downloadedBinary;
+}
+
+export async function checkForServerUpdate(
+    context: vscode.ExtensionContext,
+    outputChannel: vscode.OutputChannel
+): Promise<ServerUpdateResult> {
+    const config = vscode.workspace.getConfiguration("phpantom");
+    const configuredServerPath = config.get<string>("serverPath", "").trim();
+
+    if (configuredServerPath) {
+        return {
+            status: "skipped",
+            reason: "phpantom.serverPath is configured"
+        };
+    }
+
+    if (!config.get<boolean>("autoDownload", true)) {
+        return {
+            status: "skipped",
+            reason: "phpantom.autoDownload is disabled"
+        };
+    }
+
+    if (!config.get<boolean>("autoUpdate", true)) {
+        return {
+            status: "skipped",
+            reason: "phpantom.autoUpdate is disabled"
+        };
+    }
+
+    const requestedReleaseTag = getReleaseTag();
+    if (requestedReleaseTag !== "latest") {
+        return {
+            status: "skipped",
+            reason: `phpantom.releaseTag is pinned to ${requestedReleaseTag}`
+        };
+    }
+
+    const platformInfo = getPlatformInfo();
+    const pathBinary = await findOnPath(platformInfo.binaryName);
+    if (pathBinary) {
+        return {
+            status: "skipped",
+            reason: `phpantom_lsp on PATH has priority: ${pathBinary}`
+        };
+    }
+
+    outputChannel.appendLine("Checking for a newer PHPantom language server release.");
+    const release = await getLatestRelease();
+    const releaseTag = release.tag_name;
+    await writeLatestMarker(context, releaseTag);
+
+    const cachedBinary = getCachedBinaryPath(context, releaseTag, platformInfo);
+    if (await isFile(cachedBinary)) {
+        outputChannel.appendLine(`Latest PHPantom language server is already cached: ${releaseTag}`);
+        return {
+            status: "current",
+            releaseTag,
+            serverPath: cachedBinary
+        };
+    }
+
+    outputChannel.appendLine(`PHPantom language server ${releaseTag} is available; downloading update.`);
+    const serverPath = await downloadServer(context, outputChannel);
+
+    return {
+        status: "updated",
+        releaseTag,
+        serverPath
+    };
 }
 
 export async function clearDownloadedServer(context: vscode.ExtensionContext): Promise<void> {
