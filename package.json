@@ -1,0 +1,110 @@
+{
+    "name": "phpantom",
+    "displayName": "PHPantom",
+    "description": "Fast PHP language server with Laravel and PHPStan-aware type intelligence.",
+    "version": "0.1.0",
+    "publisher": "phpantom",
+    "license": "MIT",
+    "icon": "assets/spookaphant.png",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/AJenbo/phpantom_lsp.git",
+        "directory": "vscode-extension"
+    },
+    "bugs": {
+        "url": "https://github.com/AJenbo/phpantom_lsp/issues"
+    },
+    "homepage": "https://github.com/AJenbo/phpantom_lsp#readme",
+    "engines": {
+        "vscode": "^1.88.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "keywords": [
+        "php",
+        "phpantom",
+        "lsp",
+        "language server",
+        "laravel",
+        "phpstan"
+    ],
+    "activationEvents": [
+        "onLanguage:php",
+        "onCommand:phpantom.restartServer",
+        "onCommand:phpantom.showOutput",
+        "onCommand:phpantom.downloadServer",
+        "onCommand:phpantom.clearDownloadedServer"
+    ],
+    "main": "./dist/extension.js",
+    "contributes": {
+        "commands": [
+            {
+                "command": "phpantom.restartServer",
+                "title": "PHPantom: Restart Language Server"
+            },
+            {
+                "command": "phpantom.showOutput",
+                "title": "PHPantom: Show Output"
+            },
+            {
+                "command": "phpantom.downloadServer",
+                "title": "PHPantom: Download Language Server"
+            },
+            {
+                "command": "phpantom.clearDownloadedServer",
+                "title": "PHPantom: Clear Downloaded Language Server"
+            }
+        ],
+        "configuration": {
+            "title": "PHPantom",
+            "properties": {
+                "phpantom.serverPath": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Absolute path to a custom phpantom_lsp binary. When set, PHPantom will use this instead of PATH or the downloaded binary."
+                },
+                "phpantom.releaseTag": {
+                    "type": "string",
+                    "default": "latest",
+                    "description": "GitHub release tag to download. Use latest to download the latest stable release."
+                },
+                "phpantom.autoDownload": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Automatically download phpantom_lsp if it is not configured and not found on PATH."
+                },
+                "phpantom.trace.server": {
+                    "type": "string",
+                    "enum": [
+                        "off",
+                        "messages",
+                        "verbose"
+                    ],
+                    "default": "off",
+                    "description": "Trace communication between VS Code/Cursor and the PHPantom language server."
+                }
+            }
+        }
+    },
+    "scripts": {
+        "compile": "node esbuild.js",
+        "watch": "node esbuild.js --watch",
+        "check": "tsc --noEmit",
+        "package": "vsce package",
+        "vscode:prepublish": "node esbuild.js"
+    },
+    "dependencies": {
+        "adm-zip": "^0.5.16",
+        "tar": "^7.4.3",
+        "vscode-languageclient": "^9.0.1"
+    },
+    "devDependencies": {
+        "@types/adm-zip": "^0.5.7",
+        "@types/node": "^20.0.0",
+        "@types/vscode": "1.88.0",
+        "@vscode/vsce": "^3.2.2",
+        "esbuild": "^0.28.0",
+        "typescript": "^5.0.0"
+    }
+}
