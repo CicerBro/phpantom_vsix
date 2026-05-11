@@ -17,7 +17,6 @@ let updateTimer: NodeJS.Timeout | undefined;
 let updateCheckInProgress = false;
 let lifecycleQueue: Promise<void> = Promise.resolve();
 let pendingUpdateServerPath: string | undefined;
-let startupSummaryLogged = false;
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
     outputChannel = vscode.window.createOutputChannel("PHPantom");
@@ -81,7 +80,6 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         await startServer(context);
     });
 
-    logStartupSummary(context);
     scheduleServerUpdateChecks(context);
 }
 
@@ -115,6 +113,7 @@ async function startServer(context: vscode.ExtensionContext): Promise<void> {
         pendingUpdateServerPath = undefined;
     }
     setReadyStatus(context);
+    logStartupSummary(context);
 }
 
 async function stopClient(): Promise<void> {
@@ -351,11 +350,6 @@ function getServerVersion(binaryPath: string): Promise<string> {
 }
 
 function logStartupSummary(context: vscode.ExtensionContext): void {
-    if (startupSummaryLogged) {
-        return;
-    }
-
-    startupSummaryLogged = true;
     const workspace = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath ?? "(no workspace)";
     const source = describeServerSource(context, activeServerPath);
 
