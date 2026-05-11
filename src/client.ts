@@ -22,8 +22,6 @@ export async function startClient(
     const workspaceFolder = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
     let serverProcess: ChildProcessWithoutNullStreams | undefined;
 
-    outputChannel.appendLine(`Starting PHPantom language server: ${serverPath}`);
-
     const serverOptions: ServerOptions = async () => {
         const spawned = spawn(serverPath, [], {
             cwd: workspaceFolder,
@@ -73,8 +71,6 @@ export async function startClient(
     if (!serverProcess) {
         throw new Error("PHPantom language server started, but the server process was not captured.");
     }
-
-    outputChannel.appendLine("PHPantom language server started.");
 
     return {
         client,

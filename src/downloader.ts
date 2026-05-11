@@ -55,7 +55,6 @@ export async function resolveServerBinary(
     if (configuredServerPath) {
         const expandedPath = expandHome(configuredServerPath);
         if (await isFile(expandedPath)) {
-            outputChannel.appendLine(`Using phpantom_lsp from phpantom.serverPath: ${expandedPath}`);
             return expandedPath;
         }
 
@@ -68,7 +67,6 @@ export async function resolveServerBinary(
     const pathBinary = await findOnPath(platformInfo.binaryName);
 
     if (pathBinary) {
-        outputChannel.appendLine(`Using phpantom_lsp from PATH: ${pathBinary}`);
         return pathBinary;
     }
 
@@ -76,7 +74,6 @@ export async function resolveServerBinary(
     const cachedBinary = await findCachedBinary(context, platformInfo, releaseTag, outputChannel);
 
     if (cachedBinary) {
-        outputChannel.appendLine(`Using cached phpantom_lsp: ${cachedBinary}`);
         return cachedBinary;
     }
 
