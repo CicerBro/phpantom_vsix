@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.0
+
+- Added a PHPantom status bar item for server state and output-channel access.
+- Added `PHPantom: Show Server Version`.
+- Renamed the manual server update command to `PHPantom: Check for Server Update`.
+- Added a startup summary to the PHPantom output channel.
+- Prompt before restarting after a downloaded server update.
+- Show an information message when binary resolution settings restart the language server.
+
 ## 0.2.1
 
 - Serialized language server lifecycle operations to prevent duplicate `phpantom_lsp` processes during overlapping startup, restart, and update checks.

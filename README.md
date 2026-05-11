@@ -9,9 +9,11 @@ On first activation, the extension looks for a server binary in this order:
 3. A cached binary in the extension global storage
 4. A GitHub Releases download from `AJenbo/phpantom_lsp`, when `phpantom.autoDownload` is enabled
 
-When `phpantom.releaseTag` is `latest`, the extension also checks for newer PHPantom releases in the background on startup and periodically while active. If a newer downloaded binary becomes available, PHPantom restarts automatically so the new server is used. Background updates are skipped when `phpantom.serverPath` is set, `phpantom.autoDownload` is disabled, `phpantom.autoUpdate` is disabled, or a `phpantom_lsp` binary on `PATH` has priority.
+When `phpantom.releaseTag` is `latest`, the extension also checks for newer PHPantom releases in the background on startup and periodically while active. If a newer downloaded binary becomes available, PHPantom asks whether to restart the language server now or use the update later. Background updates are skipped when `phpantom.serverPath` is set, `phpantom.autoDownload` is disabled, `phpantom.autoUpdate` is disabled, or a `phpantom_lsp` binary on `PATH` has priority.
 
-The language server communicates over stdio and attaches to files with language ID `php`.
+The language server communicates over stdio and attaches to files with language ID `php`. A PHPantom status bar item shows whether the server is starting, ready, checking for updates, waiting for restart, stopped, or failed. Click it to open the PHPantom output channel.
+
+On startup, the PHPantom output channel logs the extension version, workspace path, active server source, server path, and auto-update state.
 
 ## Cursor
 
@@ -32,11 +34,11 @@ Install the generated `.vsix` with `Extensions: Install from VSIX...`, or instal
 
 `phpantom.serverPath`
 
-Absolute path to a custom `phpantom_lsp` binary. When set, this overrides PATH lookup and downloads.
+Absolute path to a custom `phpantom_lsp` binary. When set, this overrides PATH lookup and downloads. Changing this setting restarts the PHPantom language server.
 
 `phpantom.releaseTag`
 
-GitHub release tag to download. The default is `latest`, which uses the latest stable GitHub release.
+GitHub release tag to download. The default is `latest`, which uses the latest stable GitHub release. Changing this setting restarts the PHPantom language server.
 
 `phpantom.autoDownload`
 
@@ -58,7 +60,8 @@ Controls Language Server Protocol tracing. Values are `off`, `messages`, and `ve
 
 - `PHPantom: Restart Language Server`
 - `PHPantom: Show Output`
-- `PHPantom: Download Language Server`
+- `PHPantom: Show Server Version`
+- `PHPantom: Check for Server Update`
 - `PHPantom: Clear Downloaded Language Server`
 
 ## Troubleshooting

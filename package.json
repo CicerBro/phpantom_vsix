@@ -2,19 +2,18 @@
     "name": "phpantom",
     "displayName": "PHPantom",
     "description": "Fast PHP language server with Laravel and PHPStan-aware type intelligence.",
-    "version": "0.2.1",
-    "publisher": "phpantom",
+    "version": "0.3.0",
+    "publisher": "CicerBro",
     "license": "MIT",
     "icon": "assets/spookaphant.png",
     "repository": {
         "type": "git",
-        "url": "https://github.com/AJenbo/phpantom_lsp.git",
-        "directory": "vscode-extension"
+        "url": "https://github.com/CicerBro/phpantom_vsix.git"
     },
     "bugs": {
-        "url": "https://github.com/AJenbo/phpantom_lsp/issues"
+        "url": "https://github.com/CicerBro/phpantom_vsix/issues"
     },
-    "homepage": "https://github.com/AJenbo/phpantom_lsp#readme",
+    "homepage": "https://github.com/CicerBro/phpantom_vsix#readme",
     "engines": {
         "vscode": "^1.88.0"
     },
@@ -30,11 +29,7 @@
         "phpstan"
     ],
     "activationEvents": [
-        "onLanguage:php",
-        "onCommand:phpantom.restartServer",
-        "onCommand:phpantom.showOutput",
-        "onCommand:phpantom.downloadServer",
-        "onCommand:phpantom.clearDownloadedServer"
+        "onLanguage:php"
     ],
     "main": "./dist/extension.js",
     "contributes": {
@@ -48,8 +43,12 @@
                 "title": "PHPantom: Show Output"
             },
             {
-                "command": "phpantom.downloadServer",
-                "title": "PHPantom: Download Language Server"
+                "command": "phpantom.showServerVersion",
+                "title": "PHPantom: Show Server Version"
+            },
+            {
+                "command": "phpantom.checkForUpdate",
+                "title": "PHPantom: Check for Server Update"
             },
             {
                 "command": "phpantom.clearDownloadedServer",

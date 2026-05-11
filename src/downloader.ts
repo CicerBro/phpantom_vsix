@@ -41,6 +41,10 @@ export interface ServerUpdateResult {
     reason?: string;
 }
 
+export interface ServerUpdateOptions {
+    manual?: boolean;
+}
+
 export async function resolveServerBinary(
     context: vscode.ExtensionContext,
     outputChannel: vscode.OutputChannel
@@ -150,7 +154,8 @@ export async function downloadServer(
 
 export async function checkForServerUpdate(
     context: vscode.ExtensionContext,
-    outputChannel: vscode.OutputChannel
+    outputChannel: vscode.OutputChannel,
+    options: ServerUpdateOptions = {}
 ): Promise<ServerUpdateResult> {
     const config = vscode.workspace.getConfiguration("phpantom");
     const configuredServerPath = config.get<string>("serverPath", "").trim();
@@ -162,14 +167,14 @@ export async function checkForServerUpdate(
         };
     }
 
-    if (!config.get<boolean>("autoDownload", true)) {
+    if (!options.manual && !config.get<boolean>("autoDownload", true)) {
         return {
             status: "skipped",
             reason: "phpantom.autoDownload is disabled"
         };
     }
 
-    if (!config.get<boolean>("autoUpdate", true)) {
+    if (!options.manual && !config.get<boolean>("autoUpdate", true)) {
         return {
             status: "skipped",
             reason: "phpantom.autoUpdate is disabled"
