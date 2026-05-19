@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.2 - 2026-05-19
+
+- Improved PHPDoc hover rendering for paragraph breaks, inline `{@code ...}` tags, and `@see` references.
+- Fixed paragraph restoration when the description includes `@see` references before parameter tags.
+
 ## 0.3.1 - 2026-05-15
 
 - Added PHP outline augmentation so named functions and methods can appear in Sticky Scroll.

@@ -7,6 +7,7 @@ import {
     checkForServerUpdate,
     clearDownloadedServer
 } from "./downloader";
+import { registerHoverCommands } from "./hover";
 
 let client: LanguageClient | undefined;
 let activeServerPath: string | undefined;
@@ -25,6 +26,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
     statusBarItem.command = "phpantom.showOutput";
     context.subscriptions.push(statusBarItem);
+    registerHoverCommands(context);
     setStatus("starting", "PHPantom language server is starting.");
 
     context.subscriptions.push(

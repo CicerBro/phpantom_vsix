@@ -7,6 +7,7 @@ import {
     Trace
 } from "vscode-languageclient/node";
 import { resolveServerBinary } from "./downloader";
+import { enhancePhpHover } from "./hover";
 import { augmentPhpDocumentSymbols } from "./phpSymbols";
 
 export interface StartedClient {
@@ -58,6 +59,10 @@ export async function startClient(
             configurationSection: "phpantom"
         },
         middleware: {
+            async provideHover(document, position, token, next) {
+                const hover = await next(document, position, token);
+                return enhancePhpHover(document, position, token, hover);
+            },
             async provideDocumentSymbols(document, token, next) {
                 const symbols = await next(document, token);
                 return augmentPhpDocumentSymbols(document, symbols);
